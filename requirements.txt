@@ -3,3 +3,4 @@ uvicorn
 discord.py
 httpx
 psutil
+azure-cognitiveservices-speech
