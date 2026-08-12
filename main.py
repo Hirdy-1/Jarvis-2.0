@@ -1,12 +1,26 @@
 from fastapi import FastAPI
-import threading
-from discord_bot import start_discord
+from fastapi.middleware.cors import CORSMiddleware
+from commands.handler import handle_command
 
 app = FastAPI(title="Jarvis Backend")
+
+# CORS so dashboard can access backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # allow dashboard URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
     return {"status": "Jarvis online"}
 
-# Start Discord bot in a separate thread
-threading.Thread(target=start_discord).start()
+@app.post("/command")
+async def command(data: dict):
+    user = data.get("user")
+    message = data.get("message")
+
+    reply = await handle_command(user, message)
+    return {"reply": reply}
