@@ -1,6 +1,7 @@
-from commands.registry import COMMANDS
+from commands.registry import COMMANDS, register
 from modules.ai import ai_response
 from modules.system import system_info
+from modules.jarvis_voice import jarvis_voice
 
 async def handle_command(user, message):
     parts = message.split(" ", 1)
@@ -10,5 +11,9 @@ async def handle_command(user, message):
     if cmd in COMMANDS:
         return await COMMANDS[cmd](arg)
 
-    # fallback to AI
     return await ai_response(message)
+
+@register("speak")
+async def speak_command(arg):
+    audio = await jarvis_voice(arg)
+    return f"VOICE:{audio}"
