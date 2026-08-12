@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://jarvis-backend.onrender.com"; // change this
+const BACKEND_URL = "https://jarvis-2-0-ej0m.onrender.com/"; // change this
 
 function log(text) {
     const consoleBox = document.getElementById("console");
