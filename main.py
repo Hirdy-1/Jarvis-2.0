@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from commands.handler import handle_command
+import threading
+from discord_bot import start_discord
 
 app = FastAPI(title="Jarvis Backend")
 
@@ -7,10 +8,5 @@ app = FastAPI(title="Jarvis Backend")
 def root():
     return {"status": "Jarvis online"}
 
-@app.post("/command")
-async def command(data: dict):
-    user = data.get("user")
-    message = data.get("message")
-
-    response = await handle_command(user, message)
-    return {"reply": response}
+# Start Discord bot in a separate thread
+threading.Thread(target=start_discord).start()
