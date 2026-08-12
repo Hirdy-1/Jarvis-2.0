@@ -25,9 +25,55 @@ async function sendCommand() {
         });
 
         const data = await response.json();
-        log("Jarvis: " + data.reply);
+        const reply = data.reply;
+
+        if (reply.startsWith("VOICE:")) {
+            const base64Audio = reply.replace("VOICE:", "");
+            playVoice(base64Audio);
+            log("Jarvis (voice): Playing audio...");
+        } else {
+            log("Jarvis: " + reply);
+        }
 
     } catch (err) {
         log("Error: Could not reach Jarvis backend.");
     }
+}
+
+function playVoice(base64Audio) {
+    const audioElement = document.getElementById("jarvisAudio");
+    const audioSrc = "data:audio/mp3;base64," + base64Audio;
+    audioElement.src = audioSrc;
+    audioElement.play();
+}
+
+let recorder;
+let audioChunks = [];
+
+async function startRecording() {
+    log("Recording...");
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = e => audioChunks.push(e.data);
+
+    recorder.onstop = async () => {
+        const blob = new Blob(audioChunks, { type: "audio/wav" });
+        audioChunks = [];
+
+        const formData = new FormData();
+        formData.append("file", blob);
+
+        const response = await fetch(`${BACKEND_URL}/voice`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+        log("Jarvis: " + data.reply);
+    };
+
+    recorder.start();
+    setTimeout(() => recorder.stop(), 3000);
 }
