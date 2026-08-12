@@ -16,7 +16,10 @@
     <div class="input-area">
         <input id="commandInput" type="text" placeholder="Type a command...">
         <button onclick="sendCommand()">Send</button>
+        <button id="micBtn" onclick="startRecording()">🎤 Talk</button>
     </div>
+
+    <audio id="jarvisAudio" controls></audio>
 </div>
 
 <script src="app.js"></script>
