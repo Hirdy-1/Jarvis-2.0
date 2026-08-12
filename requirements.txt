@@ -1,6 +1,6 @@
 fastapi
 uvicorn
+python-multipart
+elevenlabs
 discord.py
-httpx
-psutil
-azure-cognitiveservices-speech
+aiohttp
