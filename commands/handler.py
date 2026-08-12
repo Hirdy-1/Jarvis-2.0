@@ -1,6 +1,5 @@
 from commands.registry import COMMANDS, register
 from modules.ai import ai_response
-from modules.system import system_info
 from modules.jarvis_voice import jarvis_voice
 
 async def handle_command(user, message):
